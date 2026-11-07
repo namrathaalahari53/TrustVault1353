@@ -36,14 +36,32 @@ docker run -d \
   trustvault:latest
 ```
 
-### 2.2 Docker Compose (App + PostgreSQL)
-```bash
-# Start both application and PostgreSQL
-docker-compose up -d --build
+---
 
-# View logs
-docker-compose logs -f
-```
+## 3. Render Deployment
+
+### 3.1 Recommended: Render Web Service (Full-Stack with Backend)
+Because TrustVault requires a running backend for JWT authentication, database persistence, and document encryption:
+1. On Render Dashboard, click **New +** > **Web Service**.
+2. Connect your GitHub repository.
+3. Configure the settings:
+   - **Name**: `Trustvalutsnovasys1353` (or any unique name)
+   - **Environment / Runtime**: `Node`
+   - **Branch**: `main`
+   - **Root Directory**: *(leave blank)*
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+4. Under **Environment Variables**, add:
+   - `NODE_ENV`: `production`
+   - `PORT`: `3000`
+   - `JWT_SECRET`: *(Click "Generate" or enter a secure random string)*
+5. Click **Deploy Web Service**.
+
+### 3.2 If Deploying as Render "Static Site" (Frontend Only)
+If you specifically select **Static Site** on Render:
+- **Build Command**: `npm install && npm run build` *(Replace the default Python command)*
+- **Publish Directory**: `dist` *(Vite outputs to `dist`, not `build`)*
+- Note: A Static Site only serves client assets; API calls require an active backend Web Service.
 
 ---
 
