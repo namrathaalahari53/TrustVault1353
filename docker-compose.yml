@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  trustvault-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: trustvault-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - JWT_SECRET=trustvault-production-high-entropy-secret-key-replace-in-env
+      - APP_URL=http://localhost:3000
+    volumes:
+      - trustvault-data:/app/data
+      - trustvault-vault:/app/uploads/vault
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: trustvault-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: trustvault
+      POSTGRES_USER: vaultuser
+      POSTGRES_PASSWORD: vaultpassword2026!
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vaultuser -d trustvault"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  trustvault-data:
+  trustvault-vault:
+  postgres-data:

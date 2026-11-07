@@ -1,0 +1,8 @@
+TRUSTVAULT SECURITY AUDIT COMPLIANCE CHECKLIST
+==============================================
+1. Enforce zero-trust server-side authorization on every endpoint.
+2. Invalidate sessions and revoked permissions with zero lag.
+3. Validate magic bytes and prevent MIME-type spoofing.
+4. Scan files for malware signatures prior to persistent disk write.
+5. Maintain cryptographic SHA-256 hash chains for tamper-evident audit trails.
+6. Enforce strict least-privilege role boundaries.
